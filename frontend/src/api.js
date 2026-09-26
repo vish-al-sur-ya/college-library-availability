@@ -16,3 +16,6 @@ export const updateBook = (id, book) => request(`/api/books/${id}`, { method: 'P
 export const deleteBook = (id) => request(`/api/books/${id}`, { method: 'DELETE' });
 export const issueBook = (id) => request(`/api/books/${id}/issue`, { method: 'POST' });
 export const returnBook = (id) => request(`/api/books/${id}/return`, { method: 'POST' });
+export const login = (details) => request('/api/auth/login', { method: 'POST', body: JSON.stringify(details) });
+export const orderBook = (id, username) => request(`/api/orders/${id}`, { method: 'POST', body: JSON.stringify({ username }) });
+export const getOrders = (username) => request(`/api/orders?username=${encodeURIComponent(username)}`);

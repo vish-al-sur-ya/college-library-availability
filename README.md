@@ -12,9 +12,9 @@ A beginner-friendly full-stack college library project built with React and Spri
 
 ## Features
 
-Students can search books by title, author, or ISBN, open book details, and see availability, copies, and shelf information.
+Students can sign in, search books by title, author, or ISBN, open book details, see availability, and order available books.
 
-Admins can add, edit, delete, issue, and return books from the admin view.
+Admins can sign in and add, edit, delete, issue, and return books from the admin view.
 
 ## Project Structure
 
@@ -56,12 +56,20 @@ The Vite development server proxies `/api` requests to Spring Boot.
 - `DELETE /api/books/{id}` - delete a book
 - `POST /api/books/{id}/issue` - issue one available copy
 - `POST /api/books/{id}/return` - return one issued copy
+- `POST /api/auth/login` - demo login
+- `GET /api/orders?username=student` - view a student's orders
+- `POST /api/orders/{bookId}` - order an available book
 
 Sample books are loaded automatically when the backend starts. Books added from the Admin desk are stored in the backend memory and remain available until the backend is restarted.
 
 ## Viva Notes
 
-`BookRepository` is a beginner-friendly in-memory repository backed by a Java map. `BookController` exposes simple REST endpoints. Availability is calculated from `totalCopies - issuedCopies`; issuing and returning only update the copy counters.
+`BookRepository` and `OrderRepository` are beginner-friendly in-memory repositories backed by Java collections. `BookController`, `AuthController`, and `OrderController` expose simple REST endpoints. Availability is calculated from `totalCopies - issuedCopies`; ordering and issuing update the copy counters.
+
+## Demo Login
+
+- Student: `student` / `student123`
+- Admin: `admin` / `admin123`
 
 ## Team and Project
 

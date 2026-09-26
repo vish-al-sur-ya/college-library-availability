@@ -8,7 +8,7 @@ Team IDs:
 - 2400030754
 - 2400090178
 
-A beginner-friendly full-stack college library project built with React, Spring Boot, Spring Data JPA, PostgreSQL, and Docker.
+A beginner-friendly full-stack college library project built with React and Spring Boot. It is designed to run locally without PostgreSQL or any other database.
 
 ## Features
 
@@ -20,28 +20,13 @@ Admins can add, edit, delete, issue, and return books from the admin view.
 
 ```text
 college-library-availability-check/
-  backend/       Spring Boot REST API
+  backend/       Spring Boot REST API with in-memory storage
   frontend/      React + Vite web application
-  docker-compose.yml
 ```
-
-## Run PostgreSQL
-
-Install Docker Desktop, then run from the project root:
-
-```bash
-docker compose up -d
-```
-
-The database is created with:
-- Database: `library_db`
-- Username: `library_user`
-- Password: `library_password`
-- Port: `5432`
 
 ## Run the backend
 
-A JDK 17 or newer and Maven are required.
+A JDK 17 or newer and Maven are required. No database setup is needed.
 
 ```bash
 cd backend
@@ -72,11 +57,11 @@ The Vite development server proxies `/api` requests to Spring Boot.
 - `POST /api/books/{id}/issue` - issue one available copy
 - `POST /api/books/{id}/return` - return one issued copy
 
-Sample books are loaded automatically when the database is empty.
+Sample books are loaded automatically when the backend starts. Books added from the Admin desk are stored in the backend memory and remain available until the backend is restarted.
 
 ## Viva Notes
 
-The `Book` entity maps to the `books` table. `BookRepository` extends `JpaRepository`, and `BookController` exposes simple REST endpoints. Availability is calculated from `totalCopies - issuedCopies`; issuing and returning only update the copy counters.
+`BookRepository` is a beginner-friendly in-memory repository backed by a Java map. `BookController` exposes simple REST endpoints. Availability is calculated from `totalCopies - issuedCopies`; issuing and returning only update the copy counters.
 
 ## Team and Project
 

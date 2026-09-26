@@ -1,13 +1,48 @@
 package com.collegelibrary.book;
 
+import java.util.Comparator;
 import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 
-public interface BookRepository extends JpaRepository<Book, Long> {
-    @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%')) "
-        + "OR LOWER(b.author) LIKE LOWER(CONCAT('%', :search, '%')) "
-        + "OR LOWER(b.isbn) LIKE LOWER(CONCAT('%', :search, '%')) ORDER BY b.title")
-    List<Book> search(@Param("search") String search);
+@Repository
+public class BookRepository {
+    private final ConcurrentHashMap<Long, Book> books = new ConcurrentHashMap<>();
+    private final AtomicLong nextId = new AtomicLong(1);
+
+    public List<Book> findAll() {
+        return books.values().stream().sorted(Comparator.comparing(Book::getTitle)).collect(Collectors.toList());
+    }
+
+    public List<Book> search(String search) {
+        String term = search.toLowerCase();
+        return books.values().stream()
+            .filter(book -> book.getTitle().toLowerCase().contains(term)
+                || book.getAuthor().toLowerCase().contains(term)
+                || book.getIsbn().toLowerCase().contains(term))
+            .sorted(Comparator.comparing(Book::getTitle))
+            .collect(Collectors.toList());
+    }
+
+    public Book findById(Long id) {
+        return books.get(id);
+    }
+
+    public Book save(Book book) {
+        if (book.getId() == null) {
+            book.setId(nextId.getAndIncrement());
+        }
+        books.put(book.getId(), book);
+        return book;
+    }
+
+    public void deleteById(Long id) {
+        books.remove(id);
+    }
+
+    public boolean existsById(Long id) {
+        return books.containsKey(id);
+    }
 }

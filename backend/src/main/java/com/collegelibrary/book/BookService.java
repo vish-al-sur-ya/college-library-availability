@@ -18,8 +18,11 @@ public class BookService {
     }
 
     public Book findById(Long id) {
-        return bookRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found"));
+        Book book = bookRepository.findById(id);
+        if (book == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        }
+        return book;
     }
 
     public Book save(Book book) {
@@ -30,7 +33,8 @@ public class BookService {
     }
 
     public void delete(Long id) {
-        bookRepository.delete(findById(id));
+        findById(id);
+        bookRepository.deleteById(id);
     }
 
     public Book issue(Long id) {

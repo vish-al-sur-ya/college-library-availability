@@ -9,7 +9,7 @@ public class SampleDataConfig {
     @Bean
     CommandLineRunner loadSampleBooks(BookRepository repository) {
         return args -> {
-            if (repository.count() == 0) {
+            if (repository.findAll().isEmpty()) {
                 repository.save(new Book("Clean Code", "Robert C. Martin", "9780132350884", "Programming", "A practical guide to writing readable, maintainable code.", "A-12", 4));
                 repository.save(new Book("The Alchemist", "Paulo Coelho", "9780062315007", "Fiction", "A student's journey of dreams, courage, and discovery.", "B-04", 3));
                 repository.save(new Book("Introduction to Algorithms", "Thomas H. Cormen", "9780262046305", "Computer Science", "A classic reference for algorithm design and analysis.", "C-21", 2));
